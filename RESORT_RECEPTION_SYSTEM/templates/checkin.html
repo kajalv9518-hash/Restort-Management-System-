@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Check-In</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 500px;
+            max-width: 90%;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 18px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            background: #007bff;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .details {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .details p {
+            margin: 8px 0;
+        }
+
+        .links {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
+
+        .links a {
+            text-decoration: none;
+        }
+
+        .secondary {
+            background: #6c757d;
+        }
+
+        .success-button {
+            background: #28a745;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+    <h1>🏨 Customer Check-In</h1>
+
+
+    <!-- ERROR MESSAGE -->
+
+    {% if error %}
+
+        <div class="error">
+            ❌ {{ error }}
+        </div>
+
+    {% endif %}
+
+
+    <!-- SUCCESS MESSAGE -->
+
+    {% if success %}
+
+        <div class="success">
+
+            <h2>✅ Check-In Successful</h2>
+
+            <div class="details">
+
+                <p>
+                    <b>Customer Name:</b>
+                    {{ name }}
+                </p>
+
+                <p>
+                    <b>Mobile Number:</b>
+                    {{ mobile }}
+                </p>
+
+                <p>
+                    <b>Room Number:</b>
+                    {{ room }}
+                </p>
+
+                <p>
+                    <b>Room Type:</b>
+                    {{ room_type }}
+                </p>
+
+                <p>
+                    <b>Check-In Date:</b>
+                    {{ checkin_date }}
+                </p>
+
+                <p>
+                    <b>Room Charge:</b>
+                    ₹{{ charge }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="links">
+
+            <a href="/checkin">
+                <button class="success-button">
+                    ➕ New Check-In
+                </button>
+            </a>
+
+            <a href="/customers">
+                <button class="secondary">
+                    👥 Customer Records
+                </button>
+            </a>
+
+            <a href="/">
+                <button class="secondary">
+                    🏠 Dashboard
+                </button>
+            </a>
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- CHECK-IN FORM -->
+
+        <form method="POST" action="/checkin">
+
+
+            <!-- CUSTOMER NAME -->
+
+            <label for="name">
+                Customer Name
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter customer name"
+                required
+            >
+
+
+            <!-- MOBILE -->
+
+            <label for="mobile">
+                Mobile Number
+            </label>
+
+            <input
+                type="tel"
+                id="mobile"
+                name="mobile"
+                placeholder="Enter mobile number"
+                required
+            >
+
+
+            <!-- ROOM -->
+
+            <label for="room">
+                Room Number
+            </label>
+
+            <select
+                id="room"
+                name="room"
+                required
+            >
+
+                <option value="">
+                    Select Room
+                </option>
+
+                {% for room in rooms %}
+
+                    <option value="{{ room['room_no'] }}">
+
+                        Room {{ room['room_no'] }}
+                        -
+                        {{ room['room_type'] }}
+                        -
+                        ₹{{ room['charge'] }}
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <!-- CHECK-IN DATE -->
+
+            <label for="checkin_date">
+                Check-In Date
+            </label>
+
+            <input
+                type="date"
+                id="checkin_date"
+                name="checkin_date"
+                required
+            >
+
+
+            <!-- SUBMIT -->
+
+            <button type="submit">
+                ✅ Check-In Customer
+            </button>
+
+        </form>
+
+
+        <!-- NAVIGATION -->
+
+        <div class="links">
+
+            <a href="/customers">
+                <button
+                    type="button"
+                    class="secondary"
+                >
+                    👥 Customer Records
+                </button>
+            </a>
+
+            <a href="/">
+                <button
+                    type="button"
+                    class="secondary"
+                >
+                    🏠 Back to Dashboard
+                </button>
+            </a>
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>

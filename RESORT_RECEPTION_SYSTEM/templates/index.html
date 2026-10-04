@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resort Reception Management System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        .header {
+            background: #1f4e78;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #ccc;
+        }
+
+        .card h2 {
+            color: #1f4e78;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .menu button {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 8px;
+            background: #1f4e78;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .menu button:hover {
+            background: #163a5c;
+        }
+
+        .charges {
+            background: white;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #ccc;
+        }
+
+        @media (max-width: 700px) {
+            .dashboard,
+            .menu {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>🏨 Resort Reception Management System</h1>
+        <p>Resort Management & Hospitality</p>
+    </div>
+
+    <div class="container">
+
+        <h2>Reception Dashboard</h2>
+
+        <div class="dashboard">
+
+            <div class="card">
+                <h3>🏨 Total Rooms</h3>
+                <h2>{{ total_rooms }}</h2>
+            </div>
+
+            <div class="card">
+                <h3>🟢 Available Rooms</h3>
+                <h2>{{ available_rooms }}</h2>
+            </div>
+
+            <div class="card">
+                <h3>🔴 Occupied Rooms</h3>
+                <h2>{{ occupied_rooms }}</h2>
+            </div>
+
+            <div class="card">
+                <h3>👥 Customers</h3>
+                <h2>{{ total_customers }}</h2>
+            </div>
+
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+            <h3>📅 Today's Check-In</h3>
+            <h2>{{ today_checkins }}</h2>
+        </div>
+
+
+        <h2>System Management</h2>
+
+        <div class="menu">
+
+            <button type="button"
+                    onclick="window.location.href='/checkin'">
+                ➕ Customer Check-In
+            </button>
+
+            <button type="button"
+                    onclick="window.location.href='/checkout'">
+                🚪 Customer Check-Out
+            </button>
+
+            <button type="button"
+                    onclick="window.location.href='/customers'">
+                👥 Customer Records
+            </button>
+
+            <button type="button"
+                    onclick="window.location.href='/rooms'">
+                🏨 Room Management
+            </button>
+
+            <button type="button"
+                    onclick="window.location.href='/billing'">
+                💰 Billing & GST
+            </button>
+
+            <button type="button"
+                    onclick="window.location.href='/payments'">
+                💳 Payment Management
+            </button>
+
+        </div>
+
+
+        <div class="charges">
+
+            <h2>💰 Room Charges</h2>
+
+            <p>🛏️ <b>AC Room:</b> ₹5,000 / day</p>
+
+            <p>🛏️ <b>Non-AC Room:</b> ₹3,000 / day</p>
+
+            <p>🧾 <b>GST:</b> 5%</p>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

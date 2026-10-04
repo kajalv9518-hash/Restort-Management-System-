@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Room Management</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .add-room {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input,
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        input {
+            width: 180px;
+        }
+
+        select {
+            width: 180px;
+        }
+
+        button,
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .add-btn {
+            background: #198754;
+        }
+
+        .checkin-btn {
+            background: #007bff;
+        }
+
+        .dashboard-btn {
+            background: #6c757d;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .available {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .occupied {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #842029;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .success {
+            background: #d1e7dd;
+            color: #0f5132;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .navigation {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🏨 Room Management</h1>
+
+    <hr>
+
+    <!-- MESSAGES -->
+
+    {% if error %}
+        <div class="error">
+            ❌ {{ error }}
+        </div>
+    {% endif %}
+
+    {% if success %}
+        <div class="success">
+            ✅ {{ success }}
+        </div>
+    {% endif %}
+
+
+    <!-- ADD NEW ROOM -->
+
+    <div class="add-room">
+
+        <h2>➕ Add New Room</h2>
+
+        <form method="POST" action="{{ url_for('rooms') }}">
+
+            <div class="form-row">
+
+                <input
+                    type="number"
+                    name="room_no"
+                    placeholder="Room Number"
+                    required
+                >
+
+                <select name="room_type" required>
+
+                    <option value="">
+                        Select Room Type
+                    </option>
+
+                    <option value="AC">
+                        AC
+                    </option>
+
+                    <option value="Non-AC">
+                        Non-AC
+                    </option>
+
+                </select>
+
+                <input
+                    type="number"
+                    name="charge"
+                    placeholder="Charge / Day"
+                    min="0"
+                    required
+                >
+
+                <button type="submit" class="add-btn">
+                    ➕ Add Room
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- ROOM TABLE -->
+
+    <h2>🏨 All Rooms</h2>
+
+    <table>
+
+        <tr>
+            <th>Room Number</th>
+            <th>Room Type</th>
+            <th>Charge / Day</th>
+            <th>Status</th>
+        </tr>
+
+        {% for room in rooms %}
+
+        <tr>
+
+            <td>
+                {{ room["room_no"] }}
+            </td>
+
+            <td>
+                {{ room["room_type"] }}
+            </td>
+
+            <td>
+                ₹{{ room["charge"] }}
+            </td>
+
+            <td>
+
+                {% if room["status"] == "Available" %}
+
+                    <span class="available">
+                        🟢 Available
+                    </span>
+
+                {% else %}
+
+                    <span class="occupied">
+                        🔴 Occupied
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% else %}
+
+        <tr>
+            <td colspan="4">
+                No rooms found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+
+    <!-- NAVIGATION -->
+
+    <div class="navigation">
+
+        <a href="{{ url_for('checkin') }}" class="btn checkin-btn">
+            ➕ New Check-In
+        </a>
+
+        <a href="{{ url_for('home') }}" class="btn dashboard-btn">
+            🏠 Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

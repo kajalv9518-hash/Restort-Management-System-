@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Resort Billing</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            padding: 30px;
+        }
+
+        .container {
+            width: 450px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px #ccc;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            box-sizing: border-box;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .generate {
+            width: 100%;
+            background: green;
+            color: white;
+            font-size: 16px;
+        }
+
+        .dashboard {
+            background: #1677ff;
+            color: white;
+        }
+
+        .customers {
+            background: #555;
+            color: white;
+        }
+
+        .error {
+            background: #ffd6d6;
+            color: red;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>🧾 Resort Billing</h1>
+
+    <h2>Generate Customer Bill</h2>
+
+
+    {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        <br>
+
+    {% endif %}
+
+
+    <form method="POST" action="/billing">
+
+        <label>
+            Room Number
+        </label>
+
+        <input
+            type="text"
+            name="room"
+            placeholder="Example: 101"
+            required
+        >
+
+
+        <br><br>
+
+
+        <label>
+            Payment Method
+        </label>
+
+        <select
+            name="payment_method"
+            required
+        >
+
+            <option value="">
+                Select Payment Method
+            </option>
+
+            <option value="Cash">
+                💵 Cash
+            </option>
+
+            <option value="Card">
+                💳 Card
+            </option>
+
+            <option value="UPI">
+                📱 UPI
+            </option>
+
+        </select>
+
+
+        <br><br>
+
+
+        <button
+            type="submit"
+            class="generate"
+        >
+            🧾 Generate Bill
+        </button>
+
+    </form>
+
+
+    <br>
+
+
+    <a href="/">
+        <button class="dashboard">
+            🏠 Dashboard
+        </button>
+    </a>
+
+
+    <a href="/customers">
+        <button class="customers">
+            👥 Customer Records
+        </button>
+    </a>
+
+</div>
+
+</body>
+
+</html>

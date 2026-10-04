@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Generated Bill</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            padding: 30px;
+        }
+
+        .bill {
+            width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 12px #ccc;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #eeeeee;
+        }
+
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .dashboard {
+            background: #1677ff;
+            color: white;
+        }
+
+        .print {
+            background: green;
+            color: white;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="bill">
+
+    <h1>🏨 RESORT BILL</h1>
+
+    <hr>
+
+
+    <p>
+        <b>Customer Name:</b>
+        {{ customer["name"] }}
+    </p>
+
+    <p>
+        <b>Mobile:</b>
+        {{ customer["mobile"] }}
+    </p>
+
+    <p>
+        <b>Room Number:</b>
+        {{ customer["room"] }}
+    </p>
+
+    <p>
+        <b>Room Type:</b>
+        {{ customer["room_type"] }}
+    </p>
+
+    <p>
+        <b>Check-In:</b>
+        {{ customer["checkin_date"] }}
+    </p>
+
+    {% if customer["checkout_date"] %}
+
+    <p>
+        <b>Check-Out:</b>
+        {{ customer["checkout_date"] }}
+    </p>
+
+    {% endif %}
+
+
+    <table>
+
+        <tr>
+            <th>Description</th>
+            <th>Amount</th>
+        </tr>
+
+        <tr>
+            <td>
+                Room Charge
+                ({{ days }} Day)
+            </td>
+
+            <td>
+                ₹{{ "%.2f"|format(room_total) }}
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                GST (5%)
+            </td>
+
+            <td>
+                ₹{{ "%.2f"|format(gst) }}
+            </td>
+        </tr>
+
+        <tr>
+            <td class="total">
+                Grand Total
+            </td>
+
+            <td class="total">
+                ₹{{ "%.2f"|format(grand_total) }}
+            </td>
+        </tr>
+
+    </table>
+
+
+    <p>
+        <b>Payment Method:</b>
+        {{ payment_method }}
+    </p>
+
+
+    <hr>
+
+
+    <button
+        class="print"
+        onclick="window.print()"
+    >
+        🖨️ Print Bill
+    </button>
+
+
+    <a href="/billing">
+        <button>
+            🧾 New Bill
+        </button>
+    </a>
+
+
+    <a href="/">
+        <button class="dashboard">
+            🏠 Dashboard
+        </button>
+    </a>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Resort Payment Management</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+        }
+
+        .payment-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .payment-box h2 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 18px;
+            padding: 11px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #198754;
+            color: white;
+            font-size: 15px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .history {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #343a40;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+
+        .paid {
+            color: green;
+            font-weight: bold;
+        }
+
+        .pending {
+            color: red;
+            font-weight: bold;
+        }
+
+        .navigation {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .navigation a {
+            text-decoration: none;
+            margin: 5px;
+        }
+
+        .navigation button {
+            background: #0d6efd;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>💳 Resort Payment Management</h1>
+
+
+    <!-- PAYMENT FORM -->
+
+    <div class="payment-box">
+
+        <h2>💰 Add Payment</h2>
+
+        <form method="POST"
+              action="/payments">
+
+
+            <label>
+                Room Number
+            </label>
+
+            <input
+                type="text"
+                name="room"
+                placeholder="Example: 101"
+                required
+            >
+
+
+            <label>
+                Payment Amount
+            </label>
+
+            <input
+                type="number"
+                name="amount"
+                placeholder="Enter amount"
+                min="1"
+                step="0.01"
+                required
+            >
+
+
+            <label>
+                Payment Method
+            </label>
+
+            <select name="method"
+                    required>
+
+                <option value="">
+                    Select Payment Method
+                </option>
+
+                <option value="Cash">
+                    💵 Cash
+                </option>
+
+                <option value="UPI">
+                    📱 UPI
+                </option>
+
+                <option value="Card">
+                    💳 Card
+                </option>
+
+                <option value="Bank Transfer">
+                    🏦 Bank Transfer
+                </option>
+
+            </select>
+
+
+            <label>
+                Payment Status
+            </label>
+
+            <select name="status"
+                    required>
+
+                <option value="Paid">
+                    Paid
+                </option>
+
+                <option value="Pending">
+                    Pending
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+                💾 Save Payment
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- PAYMENT HISTORY -->
+
+    <div class="history">
+
+        <h2>📋 Payment History</h2>
+
+        <table>
+
+            <tr>
+
+                <th>ID</th>
+
+                <th>Room</th>
+
+                <th>Amount</th>
+
+                <th>Payment Method</th>
+
+                <th>Status</th>
+
+                <th>Date</th>
+
+            </tr>
+
+
+            {% for payment in payments %}
+
+            <tr>
+
+                <td>
+                    {{ payment["id"] }}
+                </td>
+
+                <td>
+                    {{ payment["room"] }}
+                </td>
+
+                <td>
+                    ₹{{ payment["amount"] }}
+                </td>
+
+                <td>
+                    {{ payment["method"] }}
+                </td>
+
+                <td>
+
+                    {% if payment["status"] == "Paid" %}
+
+                        <span class="paid">
+                            ✅ Paid
+                        </span>
+
+                    {% else %}
+
+                        <span class="pending">
+                            ⏳ Pending
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+                    {{ payment["payment_date"] }}
+                </td>
+
+            </tr>
+
+            {% else %}
+
+            <tr>
+
+                <td colspan="6">
+                    No payment records found.
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
+
+    <div class="navigation">
+
+        <a href="/">
+            <button>🏠 Dashboard</button>
+        </a>
+
+        <a href="/billing">
+            <button>🧾 Billing</button>
+        </a>
+
+        <a href="/customers">
+            <button>👥 Customers</button>
+        </a>
+
+        <a href="/rooms">
+            <button>🏨 Rooms</button>
+        </a>
+
+        <a href="/checkout">
+            <button>🚪 Check-Out</button>
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

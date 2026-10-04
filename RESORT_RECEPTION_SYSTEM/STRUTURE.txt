@@ -1,0 +1,8 @@
+RESORT_RECEPTION_SYSTEM
+│
+├── app.py
+│
+├── templates          ← 📁 Folder
+│   └── index.html     ← 📄 File
+│
+└── static             ← 📁 Folder

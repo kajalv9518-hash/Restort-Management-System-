@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Records</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 30px auto;
+        }
+
+        .header {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0 0 8px 0;
+        }
+
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+
+        /* SEARCH */
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-form input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .search-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+        }
+
+        .search-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .clear-btn {
+            padding: 12px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            background: #6b7280;
+            color: white;
+        }
+
+        .clear-btn:hover {
+            background: #4b5563;
+        }
+
+        /* TABLE */
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+
+        th {
+            background: #1f2937;
+            color: white;
+            padding: 13px;
+            text-align: center;
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        /* STATUS */
+
+        .paid {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .pending {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .available {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        /* BUTTONS */
+
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+            margin: 2px;
+        }
+
+        .checkout-btn {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .checkout-btn:hover {
+            background: #d97706;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* NAVIGATION */
+
+        .navigation {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 18px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .nav-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .dashboard-btn {
+            background: #374151;
+        }
+
+        .dashboard-btn:hover {
+            background: #1f2937;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .container {
+                width: 98%;
+                margin: 15px auto;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-form input {
+                min-width: 100%;
+            }
+
+            .search-btn,
+            .clear-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- ================================================= -->
+    <!-- HEADER -->
+    <!-- ================================================= -->
+
+    <div class="header">
+
+        <h1>
+            👥 Customer Records
+        </h1>
+
+        <p>
+            View, search, checkout and delete customer records.
+        </p>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- SEARCH -->
+    <!-- ================================================= -->
+
+    <div class="search-box">
+
+        <form
+            method="GET"
+            action="{{ url_for('customers') }}"
+            class="search-form"
+        >
+
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="Search by name, mobile or room..."
+            >
+
+            <button
+                type="submit"
+                class="search-btn"
+            >
+                🔍 Search
+            </button>
+
+            {% if search %}
+
+            <a
+                href="{{ url_for('customers') }}"
+                class="clear-btn"
+            >
+                ✖ Clear
+            </a>
+
+            {% endif %}
+
+        </form>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- CUSTOMER TABLE -->
+    <!-- ================================================= -->
+
+    <div class="table-container">
+
+        {% if customers %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Name</th>
+
+                    <th>Mobile</th>
+
+                    <th>Room</th>
+
+                    <th>Room Type</th>
+
+                    <th>Check-In</th>
+
+                    <th>Check-Out</th>
+
+                    <th>Charge / Day</th>
+
+                    <th>Payment Method</th>
+
+                    <th>Payment Status</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for customer in customers %}
+
+                <tr>
+
+                    <!-- ID -->
+
+                    <td>
+                        {{ customer["id"] }}
+                    </td>
+
+
+                    <!-- NAME -->
+
+                    <td>
+                        {{ customer["name"] }}
+                    </td>
+
+
+                    <!-- MOBILE -->
+
+                    <td>
+                        {{ customer["mobile"] }}
+                    </td>
+
+
+                    <!-- ROOM -->
+
+                    <td>
+                        <strong>
+                            {{ customer["room"] }}
+                        </strong>
+                    </td>
+
+
+                    <!-- ROOM TYPE -->
+
+                    <td>
+                        {{ customer["room_type"] }}
+                    </td>
+
+
+                    <!-- CHECK-IN -->
+
+                    <td>
+                        {{ customer["checkin_date"] }}
+                    </td>
+
+
+                    <!-- CHECK-OUT -->
+
+                    <td>
+
+                        {% if customer["checkout_date"] %}
+
+                            {{ customer["checkout_date"] }}
+
+                        {% else %}
+
+                            <span class="pending">
+                                Active
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- CHARGE -->
+
+                    <td>
+                        ₹{{ "%.2f"|format(customer["charge"]) }}
+                    </td>
+
+
+                    <!-- PAYMENT METHOD -->
+
+                    <td>
+                        {{ customer["payment_method"] }}
+                    </td>
+
+
+                    <!-- PAYMENT STATUS -->
+
+                    <td>
+
+                        {% if customer["payment_status"] == "Paid" %}
+
+                            <span class="paid">
+                                ✅ Paid
+                            </span>
+
+                        {% else %}
+
+                            <span class="pending">
+                                ⏳ Pending
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ACTIONS -->
+
+                    <td>
+
+
+                        <!-- CHECKOUT -->
+
+                        {% if not customer["checkout_date"] %}
+
+                        <a
+                            href="{{ url_for('checkout') }}"
+                            class="btn checkout-btn"
+                        >
+                            🚪 Checkout
+                        </a>
+
+                        {% endif %}
+
+
+                        <!-- DELETE -->
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'delete_customer',
+                                customer_id=customer['id']
+                            ) }}"
+                            style="display:inline;"
+                            onsubmit="return confirm(
+                                'Are you sure you want to delete this customer?'
+                            );"
+                        >
+
+                            <button
+                                type="submit"
+                                class="btn delete-btn"
+                            >
+                                🗑️ Delete
+                            </button>
+
+                        </form>
+
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        {% else %}
+
+        <div class="empty">
+
+            <h2>
+                📭 No Customer Records Found
+            </h2>
+
+            {% if search %}
+
+            <p>
+                No customer found for:
+                <strong>{{ search }}</strong>
+            </p>
+
+            <a
+                href="{{ url_for('customers') }}"
+                class="nav-btn"
+            >
+                Show All Customers
+            </a>
+
+            {% else %}
+
+            <p>
+                No customers have been checked in yet.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- NAVIGATION -->
+    <!-- ================================================= -->
+
+    <div class="navigation">
+
+        <a
+            href="{{ url_for('checkin') }}"
+            class="nav-btn"
+        >
+            ➕ New Check-In
+        </a>
+
+
+        <a
+            href="{{ url_for('checkout') }}"
+            class="nav-btn"
+        >
+            🚪 Checkout
+        </a>
+
+
+        <a
+            href="{{ url_for('rooms') }}"
+            class="nav-btn"
+        >
+            🏨 Room Management
+        </a>
+
+
+        <a
+            href="{{ url_for('payments') }}"
+            class="nav-btn"
+        >
+            💳 Payments
+        </a>
+
+
+        <a
+            href="{{ url_for('billing') }}"
+            class="nav-btn"
+        >
+            🧾 Billing
+        </a>
+
+
+        <a
+            href="{{ url_for('home') }}"
+            class="nav-btn dashboard-btn"
+        >
+            ⬅ Dashboard
+        </a>
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

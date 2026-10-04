@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Room Checkout</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            margin-top: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button,
+        .btn {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: inline-block;
+            font-size: 15px;
+        }
+
+        .checkout-btn {
+            background: #dc3545;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .checkout-btn:hover {
+            background: #bb2d3b;
+        }
+
+        .dashboard {
+            background: #6c757d;
+            margin-top: 15px;
+        }
+
+        .customers {
+            background: #6f42c1;
+            margin-top: 15px;
+        }
+
+        .success {
+            background: #d1e7dd;
+            color: #0f5132;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #842029;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+
+        .customer-details {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .customer-details p {
+            margin: 10px 0;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .billing {
+            background: #28a745;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🚪 Room Checkout</h1>
+
+    <hr>
+
+    <!-- ERROR MESSAGE -->
+
+    {% if error %}
+
+        <div class="error">
+            ❌ {{ error }}
+        </div>
+
+    {% endif %}
+
+
+    <!-- SUCCESS MESSAGE -->
+
+    {% if success and customer %}
+
+        <div class="success">
+            ✅ Checkout completed successfully!
+        </div>
+
+        <div class="customer-details">
+
+            <h2>Customer Details</h2>
+
+            <p>
+                <b>Customer Name:</b>
+                {{ customer["name"] }}
+            </p>
+
+            <p>
+                <b>Mobile:</b>
+                {{ customer["mobile"] }}
+            </p>
+
+            <p>
+                <b>Room Number:</b>
+                {{ customer["room"] }}
+            </p>
+
+            <p>
+                <b>Room Type:</b>
+                {{ customer["room_type"] }}
+            </p>
+
+            <p>
+                <b>Check-In:</b>
+                {{ customer["checkin_date"] }}
+            </p>
+
+            <p>
+                <b>Check-Out:</b>
+                {{ customer["checkout_date"] }}
+            </p>
+
+            <p>
+                <b>Payment Status:</b>
+                {{ customer["payment_status"] }}
+            </p>
+
+        </div>
+
+        <div class="buttons">
+
+            <a href="{{ url_for('billing') }}" class="btn billing">
+                🧾 Generate Bill
+            </a>
+
+            <a href="{{ url_for('customers') }}" class="btn customers">
+                👥 Customer Records
+            </a>
+
+            <a href="{{ url_for('home') }}" class="btn dashboard">
+                🏠 Dashboard
+            </a>
+
+        </div>
+
+
+    {% else %}
+
+        <!-- CHECKOUT FORM -->
+
+        <form method="POST" action="{{ url_for('checkout') }}">
+
+            <div class="form-group">
+
+                <label for="room">
+                    🏨 Select Occupied Room
+                </label>
+
+                <select name="room" id="room" required>
+
+                    <option value="">
+                        -- Select Room --
+                    </option>
+
+                    {% for room in rooms %}
+
+                        <option value="{{ room['room_no'] }}">
+                            Room {{ room['room_no'] }}
+                            - {{ room['room_type'] }}
+                            - ₹{{ room['charge'] }}/Day
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <button type="submit" class="checkout-btn">
+                🚪 Complete Checkout
+            </button>
+
+        </form>
+
+        <div class="buttons">
+
+            <a href="{{ url_for('customers') }}" class="btn customers">
+                👥 Customer Records
+            </a>
+
+            <a href="{{ url_for('home') }}" class="btn dashboard">
+                🏠 Dashboard
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>
